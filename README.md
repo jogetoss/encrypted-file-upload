@@ -1,6 +1,6 @@
 # Description
 
-This repository is meant to serve as a general template for how to set up new repositories in the JogetOSS organization. 
+Encrypted File Upload plugin encrypts file by storing files securely in the filesystem with runtime decryption on download.
 
 # Getting Help
 
