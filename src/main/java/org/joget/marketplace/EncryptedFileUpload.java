@@ -30,6 +30,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.joget.apps.app.dao.FormDefinitionDao;
 import org.joget.apps.app.model.FormDefinition;
 import org.joget.apps.app.model.AppDefinition;
+import org.joget.apps.app.service.AppPluginUtil;
 import org.joget.apps.app.service.AppService;
 import org.joget.apps.app.service.AppUtil;
 import org.joget.apps.form.lib.FileUpload;
@@ -64,22 +65,22 @@ public class EncryptedFileUpload extends FileUpload {
 
     @Override
     public String getName() {
-        return "Encrypted File Upload";
+        return AppPluginUtil.getMessage("org.joget.marketplace.encryptedfileupload.pluginLabel", getClassName(), MESSAGE_PATH);
     }
 
     @Override
     public String getVersion() {
-        return "9.0.0";
+        return Activator.VERSION;
     }
 
     @Override
     public String getDescription() {
-        return "Encrypted File Upload Element";
+        return AppPluginUtil.getMessage("org.joget.marketplace.encryptedfileupload.pluginDesc", getClassName(), MESSAGE_PATH);
     }
 
     @Override
     public String getLabel() {
-        return "Encrypted File Upload";
+        return AppPluginUtil.getMessage("org.joget.marketplace.encryptedfileupload.pluginLabel", getClassName(), MESSAGE_PATH);
     }
 
     @Override
@@ -385,10 +386,27 @@ public class EncryptedFileUpload extends FileUpload {
                 return;
             }
 
-            SecretKeySpec key = download.field.getSecretKey(download.field.getKeyReference(), download.appDef);
-            streamDecryptedFile(request, response, file, download.decodedFileName, key, Boolean.valueOf(download.field.getPropertyString("attachment")));
+            LogUtil.debug(getClassName(), "Decrypted params: " + json.toString());
+            
+            boolean attachment = json.optBoolean("attachment", Boolean.valueOf(download.field.getPropertyString("attachment")));
+            
+            SecretKeySpec key = null;
+            String encryptionKey = json.optString("encryptionKey");
+            if (encryptionKey != null && !encryptionKey.isEmpty()) {
+                LogUtil.debug(getClassName(), "Using encryptionKey from params. Length: " + encryptionKey.length());
+                key = download.field.getSecretKey(encryptionKey, download.appDef);
+            } else {
+                LogUtil.debug(getClassName(), "Using default encryptionKey from field.");
+                key = download.field.getSecretKey(download.field.getKeyReference(), download.appDef);
+            }
+            
+            if (key != null) {
+                LogUtil.debug(getClassName(), "Resolved Key Algorithm: " + key.getAlgorithm() + ", Format: " + key.getFormat() + ", Length: " + key.getEncoded().length);
+            }
+            
+            streamDecryptedFile(request, response, file, download.decodedFileName, key, attachment);
         } catch (Exception ex) {
-            LogUtil.error(getClassName(), ex, "Unable to decrypt uploaded file");
+            LogUtil.error(getClassName(), ex, "Unable to decrypt uploaded file. Error: " + ex.getMessage());
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, ResourceBundleUtil.getMessage("org.joget.marketplace.encryptedfileupload.decryptionError"));
         }
     }

@@ -1,6 +1,8 @@
 # Description
 
-Encrypted File Upload plugin encrypts file by storing files securely in the filesystem with runtime decryption on download.
+Encrypted File Upload plugin encrypts file by storing files securely in the filesystem with runtime decryption on download. This plugin bundle includes:
+- Encrypted File Upload
+- Encrypted File Datalist Formatter
 
 # Getting Help
 

@@ -1,0 +1,32 @@
+[
+    {
+        "title":"@@org.joget.marketplace.encryptedfiledatalistformatter.edit@@",
+        "properties":[
+            {
+                "name":"formDefId",
+                "label":"@@org.joget.marketplace.encryptedfiledatalistformatter.formDefId@@",
+                "type":"selectbox",
+                "options_ajax":"[CONTEXT_PATH]/web/json/console/app[APP_PATH]/forms/options",
+                "required":"True"
+            },
+            {
+                "name":"encryptionKey",
+                "label":"@@org.joget.marketplace.encryptedfiledatalistformatter.encryptionKey@@",
+                "description":"@@org.joget.marketplace.encryptedfiledatalistformatter.encryptionKey.desc@@",
+                "type":"password",
+                "required":"True"
+            },
+            {
+                "name":"downloadAsAttachment",
+                "label":"@@org.joget.marketplace.encryptedfiledatalistformatter.downloadAsAttachment@@",
+                "type":"checkbox",
+                "options":[
+                    {
+                        "value":"true",
+                        "label":""
+                    }
+                ]
+            }
+        ]
+    }
+]
