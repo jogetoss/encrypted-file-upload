@@ -35,6 +35,19 @@
             "description":"@@org.joget.marketplace.encryptedfileupload.encryptionKey.desc@@"
          },
          {
+            "name":"encryptExistingFiles",
+            "label":"Encrypt Existing Plain Files on Submit",
+            "type":"checkbox",
+            "value":"false",
+            "description":"When enabled, any existing unencrypted file will be silently encrypted the next time the record is submitted. New files are always encrypted regardless of this setting.",
+            "options":[
+               {
+                  "value":"true",
+                  "label":""
+               }
+            ]
+         },
+         {
             "label":"@@form.fileupload.data@@",
             "type":"header"
          },

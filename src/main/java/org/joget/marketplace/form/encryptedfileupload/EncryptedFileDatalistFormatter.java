@@ -1,4 +1,4 @@
-package org.joget.marketplace;
+package org.joget.marketplace.form.encryptedfileupload;
 
 import org.joget.apps.app.model.AppDefinition;
 import org.joget.apps.app.service.AppPluginUtil;
@@ -156,6 +156,6 @@ public class EncryptedFileDatalistFormatter extends DataListColumnFormatDefault 
         }
 
         String params = StringUtil.escapeString(SecurityUtil.encrypt(json.toString()), StringUtil.TYPE_URL, null);
-        return AppUtil.getRequestContextPath() + "/web/json/app/" + appId + "/" + appVersion + "/plugin/org.joget.marketplace.EncryptedFileUpload/service?action=download&params=" + params;
+        return AppUtil.getRequestContextPath() + "/web/json/app/" + appId + "/" + appVersion + "/plugin/org.joget.marketplace.form.encryptedfileupload.EncryptedFileUpload/service?action=download&params=" + params;
     }
 }

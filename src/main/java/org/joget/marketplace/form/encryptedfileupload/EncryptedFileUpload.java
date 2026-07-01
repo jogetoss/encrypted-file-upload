@@ -1,4 +1,4 @@
-package org.joget.marketplace;
+package org.joget.marketplace.form.encryptedfileupload;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -234,6 +234,8 @@ public class EncryptedFileUpload extends FileUpload {
         }
 
         String keyReference = getKeyReference();
+        // [AI-FIX] Read the opt-in setting once so existing stored files are only processed when explicitly enabled.
+        boolean encryptExistingFiles = "true".equalsIgnoreCase(getPropertyString("encryptExistingFiles"));
         try {
             SecretKeySpec key = getSecretKey(keyReference, AppUtil.getCurrentAppDefinition());
             for (FormRow row : rowSet) {
@@ -250,6 +252,30 @@ public class EncryptedFileUpload extends FileUpload {
                         File file = FileManager.getFileByPath(path);
                         if (file != null && file.exists() && !isEncrypted(file)) {
                             encryptFileInPlace(file, key);
+                        }
+                    }
+                }
+            }
+
+            // [AI-FIX] After new uploads are handled, optionally encrypt plain files already stored for this field.
+            if (encryptExistingFiles) {
+                String primaryKeyValue = getPrimaryKeyValue(formData);
+                String tableName = "";
+                Form form = FormUtil.findRootForm(this);
+                if (form != null) {
+                    tableName = form.getPropertyString(FormUtil.PROPERTY_TABLE_NAME);
+                }
+                if (primaryKeyValue != null && !primaryKeyValue.isEmpty() && tableName != null && !tableName.isEmpty()) {
+                    String[] values = getRenderValues(formData);
+                    if (hasValue(values)) {
+                        for (String value : values) {
+                            if (value == null || value.trim().isEmpty()) {
+                                continue;
+                            }
+                            File file = FileUtil.getFile(value.trim(), tableName, primaryKeyValue);
+                            if (file != null && file.exists() && !isEncrypted(file)) {
+                                encryptFileInPlace(file, key);
+                            }
                         }
                     }
                 }

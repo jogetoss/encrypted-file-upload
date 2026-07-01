@@ -1,4 +1,4 @@
-package org.joget.marketplace;
+package org.joget.marketplace.form.encryptedfileupload;
 
 import java.util.ArrayList;
 import java.util.Collection;
