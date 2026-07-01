@@ -3,6 +3,8 @@
 Encrypted File Upload plugin encrypts file by storing files securely in the filesystem with runtime decryption on download. This plugin bundle includes:
 - Encrypted File Upload
 - Encrypted File Datalist Formatter
+- 
+To setup and configure this plugin, please see the [documentation](https://kb.joget.org/jw/web/userview/jdocs/docs/marketplace/encrypted-file-upload).
 
 # Getting Help
 
